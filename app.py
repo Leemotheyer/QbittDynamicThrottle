@@ -31,9 +31,11 @@ DEFAULT_CONFIG = {
         'enabled': False
     },
     'throttle_settings': {
-        'upload_limit': 100,  # Throttled upload limit
-        'download_limit': 100,  # Throttled download limit
-        'check_interval': 60,
+        'normal_upload': 0,          # 0 means unlimited
+        'normal_download': 0,        # 0 means unlimited
+        'throttled_upload': 100,     # KB/s
+        'throttled_download': 100,   # KB/s
+        'check_interval': 60,        # seconds
         'current_state': 'unthrottled'
     }
 }
@@ -87,17 +89,14 @@ def set_limits(session, upload_kbps, download_kbps):
         upload_bytes = int(upload_kbps) * 1024
         download_bytes = int(download_kbps) * 1024
         
-        # Set upload limit
+        # Set limits
         upload_url = f"{config['qbittorrent']['host']}/api/v2/transfer/setUploadLimit"
-        response = session.post(upload_url, data={'limit': upload_bytes})
-        response.raise_for_status()
-        
-        # Set download limit
         download_url = f"{config['qbittorrent']['host']}/api/v2/transfer/setDownloadLimit"
-        response = session.post(download_url, data={'limit': download_bytes})
-        response.raise_for_status()
         
-        print(f"Set limits to ↑{upload_kbps}KB/s (↑{upload_bytes} bytes/s) ↓{download_kbps}KB/s (↓{download_bytes} bytes/s)")
+        session.post(upload_url, data={'limit': upload_bytes})
+        session.post(download_url, data={'limit': download_bytes})
+        
+        print(f"Set limits: ↑{upload_kbps}KB/s, ↓{download_kbps}KB/s")
     except Exception as e:
         print(f"Failed to set limits: {e}")
 
@@ -155,14 +154,14 @@ def check_and_adjust_throttle():
         throttle_needed = True
     
     if throttle_needed:
-        # Convert throttle limits from KB/s to bytes
-        upload_limit = config['throttle_settings']['upload_limit']
-        download_limit = config['throttle_settings']['download_limit']
-        set_limits(session, upload_limit, download_limit)
+        set_limits(session, 
+                 config['throttle_settings']['throttled_upload'],
+                 config['throttle_settings']['throttled_download'])
         config['throttle_settings']['current_state'] = 'throttled'
     else:
-        # Set unlimited (0 means unlimited in qBittorrent)
-        set_limits(session, 0, 0)
+        set_limits(session,
+                 config['throttle_settings']['normal_upload'],
+                 config['throttle_settings']['normal_download'])
         config['throttle_settings']['current_state'] = 'unthrottled'
     
     save_config(config)
@@ -206,8 +205,10 @@ def update_config():
     config['minecraft']['active_player_threshold'] = int(request.form['mc_threshold'])
     
     # Update throttle settings
-    config['throttle_settings']['upload_limit'] = int(request.form['upload_limit'])
-    config['throttle_settings']['download_limit'] = int(request.form['download_limit'])
+    config['throttle_settings']['normal_upload'] = int(request.form['normal_upload'])
+    config['throttle_settings']['normal_download'] = int(request.form['normal_download'])
+    config['throttle_settings']['throttled_upload'] = int(request.form['throttled_upload'])
+    config['throttle_settings']['throttled_download'] = int(request.form['throttled_download'])
     config['throttle_settings']['check_interval'] = int(request.form['check_interval'])
     
     save_config(config)
@@ -222,8 +223,8 @@ def get_status():
         'current_state': config['throttle_settings']['current_state'],
         'last_check': time.strftime('%Y-%m-%d %H:%M:%S'),
         'triggered_criteria': [],
-        'current_upload': 0 if config['throttle_settings']['current_state'] == 'unthrottled' else config['throttle_settings']['upload_limit'],
-        'current_download': 0 if config['throttle_settings']['current_state'] == 'unthrottled' else config['throttle_settings']['download_limit']
+        'current_upload': config['throttle_settings']['normal_upload'],
+        'current_download': config['throttle_settings']['normal_download']
     }
     
     if config['throttle_settings']['current_state'] == 'throttled':
@@ -231,6 +232,9 @@ def get_status():
             status['triggered_criteria'].append('Jellyfin activity')
         if config['minecraft']['enabled'] and check_minecraft_players():
             status['triggered_criteria'].append('Minecraft players')
+
+        status['current_upload'] = config['throttle_settings']['throttled_upload']
+        status['current_download'] = config['throttle_settings']['throttled_download']
     
     return jsonify(status)
 

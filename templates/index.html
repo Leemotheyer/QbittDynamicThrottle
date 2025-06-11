@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QBitTorrent Throttle Control</title>
+    <title>QBitTorrent Dynamic Throttle</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>QBitTorrent Throttle Control</h1>
+        <h1>QBitTorrent Dynamic Throttle</h1>
         
         <div class="status" id="statusDisplay">
             <h2>
@@ -20,31 +20,46 @@
         </div>
         
         <form id="configForm">
-            <!-- Throttle Settings now first and default open -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
-                    <h2>Throttle Settings</h2>
+                    <h2>Speed Settings</h2>
                     <span class="arrow">▼</span>
                 </div>
                 <div class="section-content">
                     <div class="two-column">
                         <div class="form-group">
-                            <label for="upload_limit">Upload Limit (KB/s)</label>
-                            <input type="number" id="upload_limit" name="upload_limit" min="1" value="{{ config.throttle_settings.upload_limit }}">
+                            <label for="normal_upload">Normal Upload (KB/s, 0=unlimited)</label>
+                            <input type="number" id="normal_upload" name="normal_upload" min="0" 
+                                value="{{ config.throttle_settings.normal_upload }}">
                         </div>
                         <div class="form-group">
-                            <label for="download_limit">Download Limit (KB/s)</label>
-                            <input type="number" id="download_limit" name="download_limit" min="0" value="{{ config.throttle_settings.download_limit }}">
+                            <label for="normal_download">Normal Download (KB/s, 0=unlimited)</label>
+                            <input type="number" id="normal_download" name="normal_download" min="0" 
+                                value="{{ config.throttle_settings.normal_download }}">
                         </div>
                     </div>
+                    
+                    <div class="two-column">
+                        <div class="form-group">
+                            <label for="throttled_upload">Throttled Upload (KB/s)</label>
+                            <input type="number" id="throttled_upload" name="throttled_upload" min="0" 
+                                value="{{ config.throttle_settings.throttled_upload }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="throttled_download">Throttled Download (KB/s)</label>
+                            <input type="number" id="throttled_download" name="throttled_download" min="0" 
+                                value="{{ config.throttle_settings.throttled_download }}">
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="check_interval">Check Interval (seconds)</label>
-                        <input type="number" id="check_interval" name="check_interval" min="10" value="{{ config.throttle_settings.check_interval }}">
+                        <input type="number" id="check_interval" name="check_interval" min="10" 
+                            value="{{ config.throttle_settings.check_interval }}">
                     </div>
                 </div>
             </div>
 
-            <!-- QBitTorrent Settings now second and collapsed -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
                     <h2>QBitTorrent Settings</h2>

@@ -14,32 +14,38 @@ function updateStatus() {
     fetch('/get_status')
         .then(response => response.json())
         .then(data => {
-            document.getElementById('currentState').textContent = data.current_state;
-            document.getElementById('lastCheck').textContent = data.last_check;
-            
-            // Update speed display
-            const uploadText = `⬆ ${formatSpeed(data.current_upload)}`;
-            const downloadText = `⬇ ${formatSpeed(data.current_download)}`;
-            document.getElementById('currentSpeed').innerHTML = `${uploadText} | ${downloadText}`;
-            
-            // Update status div
             const statusDiv = document.getElementById('statusDisplay');
             statusDiv.className = 'status ' + data.current_state;
             
-            // Get or create criteria element
-            let criteriaElement = document.getElementById('triggeredCriteria');
-            const lastCheckElement = document.querySelector('.last-check');
+            document.getElementById('currentState').textContent = data.current_state;
+            document.getElementById('lastCheck').textContent = data.last_check;
             
+            // Display current speeds
+            const formatSpeed = (speed) => speed === 0 ? 'Unlimited' : `${speed} KB/s`;
+            
+            const uploadSpeed = data.current_upload;
+            const downloadSpeed = data.current_download;
+            
+            document.getElementById('currentSpeed').innerHTML = `
+                Current speeds: ⬆ ${formatSpeed(uploadSpeed)} | ⬇ ${formatSpeed(downloadSpeed)}
+            `;
+            
+            // Show triggered criteria if throttled
             if (data.current_state === 'throttled' && data.triggered_criteria.length > 0) {
+                const criteriaText = `Triggered by: ${data.triggered_criteria.join(' and ')}`;
+                let criteriaElement = document.getElementById('triggeredCriteria');
+                
                 if (!criteriaElement) {
                     criteriaElement = document.createElement('p');
                     criteriaElement.id = 'triggeredCriteria';
                     criteriaElement.className = 'triggered-criteria';
-                    statusDiv.insertBefore(criteriaElement, lastCheckElement);
+                    statusDiv.appendChild(criteriaElement);
                 }
-                criteriaElement.textContent = `Triggered by: ${data.triggered_criteria.join(' and ')}`;
-            } else if (criteriaElement) {
-                criteriaElement.remove();
+                
+                criteriaElement.textContent = criteriaText;
+            } else {
+                const criteriaElement = document.getElementById('triggeredCriteria');
+                if (criteriaElement) criteriaElement.remove();
             }
         });
 }

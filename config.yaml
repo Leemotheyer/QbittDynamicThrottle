@@ -16,5 +16,7 @@ qbittorrent:
 throttle_settings:
   check_interval: 60
   current_state: unthrottled
-  download_limit: 100
-  upload_limit: 100
+  normal_download: 0
+  normal_upload: 0
+  throttled_download: 100
+  throttled_upload: 100
