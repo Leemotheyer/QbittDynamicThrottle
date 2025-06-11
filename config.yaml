@@ -20,3 +20,10 @@ throttle_settings:
   normal_upload: 0
   throttled_download: 100
   throttled_upload: 100
+wireguard:
+  active_session_threshold: 1
+  enabled: false
+  host: http://wireguard:51821
+  password: adminadmin
+  session_time_threshold: 300
+  username: admin

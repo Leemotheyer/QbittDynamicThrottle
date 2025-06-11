@@ -2,6 +2,7 @@ requests
 pyyaml
 schedule
 python-dotenv
+python-dateutil
 flask
 gunicorn
 mcstatus
