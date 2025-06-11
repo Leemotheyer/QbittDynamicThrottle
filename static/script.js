@@ -30,6 +30,9 @@ function updateStatus() {
                 Current speeds: ⬆ ${formatSpeed(uploadSpeed)} | ⬇ ${formatSpeed(downloadSpeed)}
             `;
             
+            // Get the last check element to insert before it
+            const lastCheckElement = document.querySelector('.last-check');
+            
             // Show triggered criteria if throttled
             if (data.current_state === 'throttled' && data.triggered_criteria.length > 0) {
                 const criteriaText = `Triggered by: ${data.triggered_criteria.join(' and ')}`;
@@ -39,7 +42,7 @@ function updateStatus() {
                     criteriaElement = document.createElement('p');
                     criteriaElement.id = 'triggeredCriteria';
                     criteriaElement.className = 'triggered-criteria';
-                    statusDiv.appendChild(criteriaElement);
+                    statusDiv.insertBefore(criteriaElement, lastCheckElement);
                 }
                 
                 criteriaElement.textContent = criteriaText;
