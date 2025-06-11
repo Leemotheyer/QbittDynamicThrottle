@@ -1,2 +1,6 @@
 /__pycache__
 /configcopy.yaml
+.venv
+.python-version
+pyproject.toml
+uv.lock

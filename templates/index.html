@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QBitTorrent Dynamic Throttle</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <div class="container">
         <h1>QBitTorrent Dynamic Throttle</h1>
-        
+
         <div class="status" id="statusDisplay">
             <h2>
                 <span>Current Status: <span id="currentState">Loading...</span></span>
@@ -18,7 +20,7 @@
             <!-- Triggered criteria will be inserted here by JavaScript -->
             <p class="last-check">Last checked: <span id="lastCheck">-</span></p>
         </div>
-        
+
         <form id="configForm">
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
@@ -29,32 +31,32 @@
                     <div class="two-column">
                         <div class="form-group">
                             <label for="normal_upload">Normal Upload (KB/s, 0=unlimited)</label>
-                            <input type="number" id="normal_upload" name="normal_upload" min="0" 
+                            <input type="number" id="normal_upload" name="normal_upload" min="0"
                                 value="{{ config.throttle_settings.normal_upload }}">
                         </div>
                         <div class="form-group">
                             <label for="normal_download">Normal Download (KB/s, 0=unlimited)</label>
-                            <input type="number" id="normal_download" name="normal_download" min="0" 
+                            <input type="number" id="normal_download" name="normal_download" min="0"
                                 value="{{ config.throttle_settings.normal_download }}">
                         </div>
                     </div>
-                    
+
                     <div class="two-column">
                         <div class="form-group">
                             <label for="throttled_upload">Throttled Upload (KB/s)</label>
-                            <input type="number" id="throttled_upload" name="throttled_upload" min="0" 
+                            <input type="number" id="throttled_upload" name="throttled_upload" min="0"
                                 value="{{ config.throttle_settings.throttled_upload }}">
                         </div>
                         <div class="form-group">
                             <label for="throttled_download">Throttled Download (KB/s)</label>
-                            <input type="number" id="throttled_download" name="throttled_download" min="0" 
+                            <input type="number" id="throttled_download" name="throttled_download" min="0"
                                 value="{{ config.throttle_settings.throttled_download }}">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="check_interval">Check Interval (seconds)</label>
-                        <input type="number" id="check_interval" name="check_interval" min="10" 
+                        <input type="number" id="check_interval" name="check_interval" min="10"
                             value="{{ config.throttle_settings.check_interval }}">
                     </div>
                 </div>
@@ -67,7 +69,8 @@
                 </div>
                 <div class="section-content collapsed">
                     <div class="form-group checkbox">
-                        <input type="checkbox" id="qb_enabled" name="qb_enabled" {% if config.qbittorrent.enabled %}checked{% endif %}>
+                        <input type="checkbox" id="qb_enabled" name="qb_enabled" {% if config.qbittorrent.enabled
+                            %}checked{% endif %}>
                         <label for="qb_enabled">Enable QBitTorrent Control</label>
                     </div>
                     <div class="form-group">
@@ -76,15 +79,17 @@
                     </div>
                     <div class="form-group">
                         <label for="qb_username">Username</label>
-                        <input type="text" id="qb_username" name="qb_username" value="{{ config.qbittorrent.username }}" required>
+                        <input type="text" id="qb_username" name="qb_username" value="{{ config.qbittorrent.username }}"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="qb_password">Password</label>
-                        <input type="password" id="qb_password" name="qb_password" value="{{ config.qbittorrent.password }}" required>
+                        <input type="password" id="qb_password" name="qb_password"
+                            value="{{ config.qbittorrent.password }}" required>
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
                     <h2>Jellyfin Settings</h2>
@@ -92,7 +97,8 @@
                 </div>
                 <div class="section-content collapsed">
                     <div class="form-group checkbox">
-                        <input type="checkbox" id="jf_enabled" name="jf_enabled" {% if config.jellyfin.enabled %}checked{% endif %}>
+                        <input type="checkbox" id="jf_enabled" name="jf_enabled" {% if config.jellyfin.enabled
+                            %}checked{% endif %}>
                         <label for="jf_enabled">Enable Jellyfin Monitoring</label>
                     </div>
                     <div class="form-group">
@@ -105,11 +111,12 @@
                     </div>
                     <div class="form-group">
                         <label for="jf_threshold">Active Stream Threshold</label>
-                        <input type="number" id="jf_threshold" name="jf_threshold" min="1" value="{{ config.jellyfin.active_stream_threshold }}">
+                        <input type="number" id="jf_threshold" name="jf_threshold" min="1"
+                            value="{{ config.jellyfin.active_stream_threshold }}">
                     </div>
                 </div>
             </div>
-            
+
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
                     <h2>Minecraft Settings</h2>
@@ -117,7 +124,8 @@
                 </div>
                 <div class="section-content collapsed">
                     <div class="form-group checkbox">
-                        <input type="checkbox" id="mc_enabled" name="mc_enabled" {% if config.minecraft.enabled %}checked{% endif %}>
+                        <input type="checkbox" id="mc_enabled" name="mc_enabled" {% if config.minecraft.enabled
+                            %}checked{% endif %}>
                         <label for="mc_enabled">Enable Minecraft Monitoring</label>
                     </div>
                     <div class="form-group">
@@ -126,19 +134,62 @@
                     </div>
                     <div class="form-group">
                         <label for="mc_port">Server Port</label>
-                        <input type="number" id="mc_port" name="mc_port" min="1" max="65535" value="{{ config.minecraft.port }}">
+                        <input type="number" id="mc_port" name="mc_port" min="1" max="65535"
+                            value="{{ config.minecraft.port }}">
                     </div>
                     <div class="form-group">
                         <label for="mc_threshold">Active Player Threshold</label>
-                        <input type="number" id="mc_threshold" name="mc_threshold" min="1" value="{{ config.minecraft.active_player_threshold }}">
+                        <input type="number" id="mc_threshold" name="mc_threshold" min="1"
+                            value="{{ config.minecraft.active_player_threshold }}">
                     </div>
                 </div>
             </div>
-            
+
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Wireguard Settings</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="wireguard_enabled" name="wireguard_enabled" {% if
+                            config.wireguard.enabled %}checked{% endif %}>
+                        <label for="wireguard_enabled">Enable Wireguard Monitoring</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="wireguard_host">Server Host</label>
+                        <input type="text" id="wireguard_host" name="wireguard_host"
+                            value="{{ config.wireguard.host }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="wireguard_username">Username</label>
+                        <input type="text" id="wireguard_username" name="wireguard_username"
+                            value="{{ config.wireguard.username }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wireguard_password">Password</label>
+                        <input type="password" id="wireguard_password" name="wireguard_password"
+                            value="{{ config.wireguard.password }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wireguard_session_time_threshold">Session Time Threshold</label>
+                        <input type="number" id="wireguard_session_time_threshold"
+                            name="wireguard_session_time_threshold" min="1"
+                            value="{{ config.wireguard.session_time_threshold }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="wireguard_active_session_threshold">Active Session Threshold</label>
+                        <input type="number" id="wireguard_active_session_threshold"
+                            name="wireguard_active_session_threshold" min="1"
+                            value="{{ config.wireguard.active_session_threshold }}">
+                    </div>
+                </div>
+            </div>
             <button type="submit">Save Configuration</button>
         </form>
     </div>
-    
+
     <script src="/static/script.js"></script>
 </body>
+
 </html>
