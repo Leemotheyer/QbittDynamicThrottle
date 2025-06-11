@@ -1,7 +1,8 @@
-Dynamically throttle QBittorrent speeds, based on jellyfin and minecraft
+# Dynamically throttle QBittorrent speeds, based on jellyfin and minecraft
 
-Install with docker:  
-```
+## Install with docker
+
+```docker
 image: leemotheyer/qbittdynamicthrottle:latest
 container_name: qbt-throttle-control
 restart: unless-stopped
