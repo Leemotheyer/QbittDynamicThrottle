@@ -1,0 +1,7 @@
+requests
+pyyaml
+schedule
+python-dotenv
+flask
+gunicorn
+mcstatus

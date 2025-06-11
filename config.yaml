@@ -1,0 +1,20 @@
+jellyfin:
+  active_stream_threshold: 1
+  api_key: ''
+  enabled: false
+  host: http://jellyfin:8096
+minecraft:
+  active_player_threshold: 1
+  enabled: false
+  host: minecraft-server
+  port: 25565
+qbittorrent:
+  enabled: true
+  host: http://qbittorrent:8080
+  password: adminadmin
+  username: admin
+throttle_settings:
+  check_interval: 60
+  current_state: unthrottled
+  download_limit: 100
+  upload_limit: 100

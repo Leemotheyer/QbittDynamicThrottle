@@ -1,0 +1,184 @@
+:root {
+    --bg-color: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --text-color: #e0e0e0;
+    --accent-color: #4CAF50;
+    --accent-hover: #45a049;
+    --border-color: #444;
+    --input-bg: #3d3d3d;
+    --status-throttled: #5c2a2a;
+    --status-unthrottled: #2a5c2a;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    font-size: larger;
+}
+
+.container {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+h1 {
+    color: var(--accent-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.7rem;
+    color: var(--accent-color);
+}
+
+.section-header .arrow {
+    transition: transform 0.3s;
+}
+
+.section-header.collapsed .arrow {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    padding: 0 15px;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.section-content.collapsed {
+    padding: 0 15px;
+    max-height: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+select {
+    width: 98%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checkbox input {
+    width: auto;
+    margin-right: 10px;
+}
+
+button {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: var(--accent-hover);
+}
+
+.status {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.status.throttled {
+    background-color: var(--status-throttled);
+}
+
+.status.unthrottled {
+    background-color: var(--status-unthrottled);
+}
+
+.status h2 {
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+}
+
+.triggered-criteria {
+    margin: 8px 0;
+    font-size: 0.9em;
+    color: #ffa07a;
+    font-style: italic;
+}
+
+.last-check {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.speed-display {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.status.unthrottled .speed-display {
+    color: #7fff7f; /* Light green for unlimited speeds */
+}
+
+.status.throttled .speed-display {
+    color: #ff7f7f; /* Light red for throttled speeds */
+}

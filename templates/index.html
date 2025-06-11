@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QBitTorrent Throttle Control</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>QBitTorrent Throttle Control</h1>
+        
+        <div class="status" id="statusDisplay">
+            <h2>
+                <span>Current Status: <span id="currentState">Loading...</span></span>
+                <span id="currentSpeed" class="speed-display">-</span>
+            </h2>
+            <!-- Triggered criteria will be inserted here by JavaScript -->
+            <p class="last-check">Last checked: <span id="lastCheck">-</span></p>
+        </div>
+        
+        <form id="configForm">
+            <!-- Throttle Settings now first and default open -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Throttle Settings</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="two-column">
+                        <div class="form-group">
+                            <label for="upload_limit">Upload Limit (KB/s)</label>
+                            <input type="number" id="upload_limit" name="upload_limit" min="1" value="{{ config.throttle_settings.upload_limit }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="download_limit">Download Limit (KB/s)</label>
+                            <input type="number" id="download_limit" name="download_limit" min="0" value="{{ config.throttle_settings.download_limit }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="check_interval">Check Interval (seconds)</label>
+                        <input type="number" id="check_interval" name="check_interval" min="10" value="{{ config.throttle_settings.check_interval }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- QBitTorrent Settings now second and collapsed -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>QBitTorrent Settings</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="qb_enabled" name="qb_enabled" {% if config.qbittorrent.enabled %}checked{% endif %}>
+                        <label for="qb_enabled">Enable QBitTorrent Control</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="qb_host">QBitTorrent Web UI URL</label>
+                        <input type="text" id="qb_host" name="qb_host" value="{{ config.qbittorrent.host }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="qb_username">Username</label>
+                        <input type="text" id="qb_username" name="qb_username" value="{{ config.qbittorrent.username }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="qb_password">Password</label>
+                        <input type="password" id="qb_password" name="qb_password" value="{{ config.qbittorrent.password }}" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Jellyfin Settings</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="jf_enabled" name="jf_enabled" {% if config.jellyfin.enabled %}checked{% endif %}>
+                        <label for="jf_enabled">Enable Jellyfin Monitoring</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="jf_host">Jellyfin URL</label>
+                        <input type="text" id="jf_host" name="jf_host" value="{{ config.jellyfin.host }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="jf_api_key">API Key</label>
+                        <input type="text" id="jf_api_key" name="jf_api_key" value="{{ config.jellyfin.api_key }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="jf_threshold">Active Stream Threshold</label>
+                        <input type="number" id="jf_threshold" name="jf_threshold" min="1" value="{{ config.jellyfin.active_stream_threshold }}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2>Minecraft Settings</h2>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="mc_enabled" name="mc_enabled" {% if config.minecraft.enabled %}checked{% endif %}>
+                        <label for="mc_enabled">Enable Minecraft Monitoring</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="mc_host">Server Host</label>
+                        <input type="text" id="mc_host" name="mc_host" value="{{ config.minecraft.host }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="mc_port">Server Port</label>
+                        <input type="number" id="mc_port" name="mc_port" min="1" max="65535" value="{{ config.minecraft.port }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="mc_threshold">Active Player Threshold</label>
+                        <input type="number" id="mc_threshold" name="mc_threshold" min="1" value="{{ config.minecraft.active_player_threshold }}">
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit">Save Configuration</button>
+        </form>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
